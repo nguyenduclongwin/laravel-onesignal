@@ -306,7 +306,7 @@ class OneSignalClient
             );
         }
 
-        $this->sendNotificationCustom($params);
+        return $this->sendNotificationCustom($params);
     }
 
     public function sendNotificationToSegment($message, $segment, $url = null, $data = null, $buttons = null, $schedule = null, $headings = null, $subtitle = null) {
