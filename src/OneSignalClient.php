@@ -171,7 +171,7 @@ class OneSignalClient
             );
         }
 
-        $this->sendNotificationCustom($params);
+        return $this->parseReponse( $this->sendNotificationCustom($params) );
     }
 
     /**
@@ -223,7 +223,7 @@ class OneSignalClient
             );
         }
 
-        $this->sendNotificationCustom($params);
+        return $this->parseReponse( $this->sendNotificationCustom($params) );
     }
     public function sendNotificationUsingTags($message, $tags, $url = null, $data = null, $buttons = null, $schedule = null, $headings = null, $subtitle = null) {
         $contents = array(
@@ -264,7 +264,7 @@ class OneSignalClient
             );
         }
 
-        $this->sendNotificationCustom($params);
+        return $this->parseReponse( $this->sendNotificationCustom($params) );
     }
 
     public function sendNotificationToAll($message, $url = null, $data = null, $buttons = null, $schedule = null, $headings = null, $subtitle = null) {
@@ -306,7 +306,7 @@ class OneSignalClient
             );
         }
 
-        return $this->sendNotificationCustom($params);
+        return $this->parseReponse( $this->sendNotificationCustom($params) );
     }
 
     public function sendNotificationToSegment($message, $segment, $url = null, $data = null, $buttons = null, $schedule = null, $headings = null, $subtitle = null) {
@@ -348,7 +348,7 @@ class OneSignalClient
             );
         }
 
-        $this->sendNotificationCustom($params);
+        return $this->parseReponse( $this->sendNotificationCustom($params) );
     }
 
     public function deleteNotification($notificationId, $appId = null) {
@@ -496,7 +496,16 @@ class OneSignalClient
         $method = strtolower($method);
         return $this->{$method}($endpoint);
     }
-
+    
+    private function parseReponse( $result )
+    {
+        try{
+            return json_decode( $result->getBody()->getContents() );
+        }catch(\Exception $e) {
+            return null;
+        }    
+    }
+    
     public function post($endPoint) {
         if($this->requestAsync === true) {
             $promise = $this->client->postAsync(self::API_URL . $endPoint, $this->headers);
